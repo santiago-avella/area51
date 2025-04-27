@@ -1,0 +1,17 @@
+{% load static %}
+
+<nav class="section_navbar">
+    <div id="container" class="container">
+        <div id="flex-column" class="flex-column section_navbar section_navbar--flex">
+            <div id="item1">
+                <img src="{% static '/gallery/images/logoArea51.png' %}" id="logo">
+            </div>
+            <div class="flex-column links" id="item2">
+                <a href="">Galería</a>
+                <!--<a href="">Ordenes</a>-->
+                <a href="https://myarea51.net/">Modelos</a>
+                <a href="{% url 'logout' %}">Salir</a>
+            </div>
+        </div>
+    </div>
+</nav>

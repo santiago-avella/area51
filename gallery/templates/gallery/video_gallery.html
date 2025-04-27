@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block css_page %}
+    <link rel="stylesheet" href="{% static '/gallery/styles.css' %}">
+{% endblock  %}
+
+{% block title_page %}{% endblock %}
+
+
+{% block content_page %}
+    {% include 'gallery/includes/navbar.html' %}
+    <section class="section_video_content">
+        <div class="container">
+       
+            <source>
+                <video controls src="{% url 'stream-video' video_request.id token%}"></video>  
+            </source>
+
+            <div class="flex-column tab_info_video tab_info_video--flex">
+              
+                <h3 id="name_model">
+                    {{ video_request.model.name }}
+                </h3>
+           
+        
+                <h3 id="date_video">
+                    {{ video_request.date }}
+                </h3>
+        
+                <div style="display: flex; align-items: center;" id="item3">
+                    <img class="like" src="{% static '/gallery/images/icon_like_active.png' %}">
+                    <img class="like dislike" src="{% static '/gallery/images/icon_like.png' %}">   
+                </div>
+            </div>
+            
+        </div>
+    </section>
+{% endblock %}
+    

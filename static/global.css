@@ -1,0 +1,45 @@
+html{
+    font-family: 'Montserrat',sans-serif;
+}
+
+
+body{
+    margin: 0;
+    background-color: black;
+}
+
+
+.section_404{
+    padding: 5% 110px;
+}
+
+.container{
+    max-width: 1200px;
+    margin: auto;
+}
+
+
+.window_message{
+    position: relative;
+    max-width: 40%;
+    background-color: #ff0000;
+    padding: 5%;
+    margin: auto;
+    border-radius: 0.8rem;
+}
+
+.window_message h1, h2{
+    color: white;
+    font-weight: 900;
+    text-align: center;
+}
+
+.window_message h2{
+    font-weight: 400;
+    font-style: italic;
+}
+
+
+.logo{
+    max-width: 90px;
+}

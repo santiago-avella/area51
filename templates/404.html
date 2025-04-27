@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title_page %} Page not found - {{ exception_value }} {% endblock  %}
+
+{% block content_page %}
+    <div class="section_404">
+        <div class="container">
+            <img class="logo" src="{% static 'gallery/images/logoArea51.png' %}" alt="">
+            <div class="window_message">
+                <h1>Pagina no Encontrada</h1>
+                <h2>usuario no existe o esta bloqueado</h2>
+            </div>
+        </div>
+    </div>
+{% endblock  %}

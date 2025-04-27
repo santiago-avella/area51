@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css_page %}
+<link rel="stylesheet" href="{% static '/gallery/styles.css' %}">
+{% endblock %}
+
+{% block title_page %}Área51 - Contenidos{% endblock %}
+
+
+{% block content_page %}
+{% include 'gallery/includes/navbar.html' %}
+<div class="section_index">
+    <div class="container">
+        <h1>Bienvenido, <span>{{ username }}</span></h1>
+        <form action="{% url 'index-gallery' %}" method="post">
+            {% csrf_token %}
+            <div class="flex-column contents">
+                <button type="submit" name="button_value" value="Video" class="flex-column contents contents--flex">
+                    <img class="img" src="{% static '/gallery/images/icon_video.png' %}">
+                    <h3>Videos</h3>
+                </button>
+
+                <button type="submit" name="button_value" value="Imagen" class="flex-column contents contents--flex">
+                    <img class="img" src="{% static '/gallery/images/icon_photo.png' %}">
+                    <h3>Fotos</h3>
+                </button>
+
+                <button type="submit" name="button_value" value="Audio" class="flex-column contents contents--flex">
+                    <img class="img" src="{% static '/gallery/images/icon_audio.png' %}">
+                    <h3>Audios</h3>
+                </button>
+
+            </div>
+        </form>
+
+        {% if contents %}
+            <div id="space_contents" class="grid_items_contents">
+            {% if content_type == 'Video' %}
+                {% for content in contents %}
+                    <a class="space_video" href="{% url 'video-player' content.id%}">
+                        {% if content.miniature %}
+                            <img src="{{ content.miniature }}">
+                        {% else %}
+                            <img src="{{ content.model.image }}">
+                        {% endif %}
+                        <h3>{{ content.model.name }}</h3>
+
+                        <div class="window_date">
+                            {{ content.date.date }}
+                        </div>
+                    </a>
+                {% endfor %}
+            {% elif content_type == 'Imagen' %}
+               {% for content in contents %}
+                        <a class="space_video" onclick="openModal('modal-{{ content.id }}')">
+                            <img src="{{ content.url }}">
+                            <h3>{{ content.model.name }}</h3>
+                            <div class="window_date">
+                                {{ content.date.date }}
+                            </div>
+                        </a> 
+                        <dialog id="modal-{{ content.id }}" class="modal_image">
+                            <a onclick="closeModal('modal-{{ content.id }}')">
+                                <img class="icon_close" src="{% static 'gallery/images/icon_close_modal.png' %}" alt="">
+                                <img class="image_big" src="{{ content.url}}" alt="">
+                            </a>
+                        </dialog>
+                        
+                {% endfor %}
+            {% elif content_type == 'Audio' %}
+                {% for content in contents %}
+                <div class="space_audio">
+                    <h3>{{ content.model.name }}</h3>
+                    <h4>{{ content.date.date }}</h4>
+                    <audio class="audio-custom" controls src="{{ content.url }}"></audio>
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        {% else %}
+        {% if content_type %}
+        <h1>No hay contenidos disponibles</h1>
+        {% endif %}
+        {% endif %}
+
+
+    </div>
+</div>
+</div>
+
+<script>
+    function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.showModal();
+    }
+
+    function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.close();
+    }
+
+    document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+             if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+                e.preventDefault();
+            }
+        });
+</script>
+
+{% endblock %}
