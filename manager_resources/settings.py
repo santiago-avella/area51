@@ -30,7 +30,7 @@ SECRET_AUTHENTIFICATE = os.getenv('SECRET_AUTHENTIFICATE')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['web-production-7206c.up.railway.app']
 
 
 # Application definition
@@ -145,4 +145,4 @@ LOGIN_URL = 'https://myarea51.net/login/'
 
 AUTH_USER_MODEL = 'gallery.Customer'
 
-CSRF_TRUSTED_ORIGINS = []
+CSRF_TRUSTED_ORIGINS = ['https://web-production-7206c.up.railway.app']
