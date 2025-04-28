@@ -29,9 +29,9 @@ WEBHOOK_KEY = os.getenv('WEBHOOK_KEY')
 SECRET_AUTHENTIFICATE = os.getenv('SECRET_AUTHENTIFICATE')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG_STATUS', "False") == 'True'
+DEBUG = True
 
-ALLOWED_HOSTS = ['web-production-7206c.up.railway.app']
+ALLOWED_HOSTS = ['127.0.0.1', 'web-production-7206c.up.railway.app']
 
 
 # Application definition
