@@ -17,6 +17,7 @@ from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv()
 
 
 # Quick-start development settings - unsuitable for production
@@ -28,9 +29,9 @@ WEBHOOK_KEY = os.getenv('WEBHOOK_KEY')
 SECRET_AUTHENTIFICATE = os.getenv('SECRET_AUTHENTIFICATE')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['web-production-7206c.up.railway.app']
+ALLOWED_HOSTS = ['127.0.0.1','https://web-production-7206c.up.railway.app/']
 
 
 # Application definition
@@ -83,6 +84,7 @@ WSGI_APPLICATION = 'manager_resources.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+
 
 DATABASES = {
     'default': dj_database_url.config(default=os.getenv('URL_DATABASE'))
