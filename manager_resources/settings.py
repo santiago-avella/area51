@@ -29,9 +29,9 @@ WEBHOOK_KEY = os.getenv('WEBHOOK_KEY')
 SECRET_AUTHENTIFICATE = os.getenv('SECRET_AUTHENTIFICATE')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG_STATUS', 'False') == 'True'
 
-ALLOWED_HOSTS = ['127.0.0.1', 'web-production-7206c.up.railway.app']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -126,14 +126,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 
-STORAGES = {
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
+
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATIC_URL = 'static/'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]

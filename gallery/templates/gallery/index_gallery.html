@@ -3,6 +3,7 @@
 
 {% block css_page %}
 <link rel="stylesheet" href="{% static '/gallery/styles.css' %}">
+
 {% endblock %}
 
 {% block title_page %}Área51 - Contenidos{% endblock %}
@@ -81,32 +82,12 @@
 
         {% else %}
         {% if content_type %}
-        <h1>No hay contenidos disponibles</h1>
+            <h1>No hay contenidos disponibles</h1>
         {% endif %}
         {% endif %}
 
 
     </div>
 </div>
-</div>
-
-<script>
-    function openModal(modalId) {
-        const modal = document.getElementById(modalId);
-        modal.showModal();
-    }
-
-    function closeModal(modalId) {
-        const modal = document.getElementById(modalId);
-        modal.close();
-    }
-
-    document.addEventListener('contextmenu', e => e.preventDefault());
-        document.addEventListener('keydown', e => {
-             if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
-                e.preventDefault();
-            }
-        });
-</script>
-
+<script src="{% static 'gallery/js/disable_click_left.js' %}"></script>
 {% endblock %}
