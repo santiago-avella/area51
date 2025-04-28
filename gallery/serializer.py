@@ -55,9 +55,12 @@ class OrderSerializer(serializers.ModelSerializer):
         order = Order.objects.create(gallery=gallery, **validated_data)
 
         for item in items_order:
-            Content.objects.create(type=item['meta_data']['type_content'], 
+            try:
+                Content.objects.create(type=item['meta_data']['type_content'], 
                                    description=item['meta_data']['description'],
-                                   modelo=item['product_id'], order=order)
+                                   model=item['product_id'], order=order)
+            except:
+                raise serializers.ValidationError('No se pudo guardar la informacion de itmes por orden')
         return order
 
 
