@@ -154,15 +154,20 @@ class VideoPlayer(LoginRequiredMixin, View):
 def StreamVideo(request, pk, token):
     video_player = get_object_or_404(Content, id=pk)
     url = video_player.url
-    response = requests.get(url, stream=True)
+    headers = {}
+    range_headers = request.headers.get('Range')
+    if range_headers:
+        headers['Range'] = range_headers
+    response = requests.get(url, headers=headers,  stream=True)
+    print(response.headers['Content-Type'])
     if VideoPlayer.validate_token(token): 
         return StreamingHttpResponse(
-            streaming_content=response.iter_content(chunk_size=8192),
+            streaming_content=response.iter_content(chunk_size=4192),
             content_type = response.headers['Content-Type'],
-            headers={
-                'Content-Disposition': 'inline', 
-                'X-Content-Type-Options': 'nosniff',  
-            })
+            #headers={
+                #'Content-Disposition': 'inline', 
+                #'X-Content-Type-Options': 'nosniff',  }
+            )
     else:
         return Http404()
     
