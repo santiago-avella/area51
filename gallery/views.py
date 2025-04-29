@@ -161,13 +161,17 @@ def StreamVideo(request, pk, token):
     response = requests.get(url, headers=headers,  stream=True)
     print(response.headers['Content-Type'])
     if VideoPlayer.validate_token(token): 
-        return StreamingHttpResponse(
-            streaming_content=response.iter_content(chunk_size=4192),
-            content_type = response.headers['Content-Type'],
+        response = StreamingHttpResponse(
+            streaming_content=response.iter_content(chunk_size=4096),
+            content_type = 'video/mp4'
             #headers={
                 #'Content-Disposition': 'inline', 
                 #'X-Content-Type-Options': 'nosniff',  }
             )
+        if 'Content-Range' in request.headers:
+            response['Content-Range'] = request.headers['Content-Range']
+            response['Accept-Ranges'] = 'bytes'
+        return response
     else:
         return Http404()
     
