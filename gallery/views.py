@@ -79,7 +79,7 @@ class PageAuthenticate(View):
             return HttpResponseRedirect(reverse('index'))
         customer_order_find = self.validate_user_orders(customer_find)
         if not customer_order_find['response']['status']:
-            return HttpResponseForbidden (customer_order_find['response']['content'])
+            return render(request,'404.html', {'message_error': customer_order_find['response']['content']}, status=404)
         user = customer_order_find['response']['content']
         login(request, user)
         return HttpResponseRedirect(reverse('index-gallery'))
@@ -164,7 +164,7 @@ def StreamVideo(request, pk, token):
                 'X-Content-Type-Options': 'nosniff',  
             })
     else:
-        return HttpResponseForbidden('Acceso invalido')
+        return Http404()
     
 
 

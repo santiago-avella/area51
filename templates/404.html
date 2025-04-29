@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title_page %} Page not found - {{ exception_value }} {% endblock  %}
+{% block title_page %} Page not found {% endblock  %}
 
 {% block content_page %}
     <div class="section_404">
@@ -9,7 +9,7 @@
             <img class="logo" src="{% static 'gallery/images/logoArea51.png' %}" alt="">
             <div class="window_message">
                 <h1>Pagina no Encontrada</h1>
-                <h2>usuario no existe o esta bloqueado</h2>
+                <h2>{{ message_error }} </h2>
             </div>
         </div>
     </div>

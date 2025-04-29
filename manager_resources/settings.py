@@ -144,4 +144,4 @@ LOGIN_URL = 'https://myarea51.net/login/'
 
 AUTH_USER_MODEL = 'gallery.Customer'
 
-CSRF_TRUSTED_ORIGINS = ['https://web-production-7206c.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://web-production-7206c.up.railway.app', 'https://gallery.myarea51.net']
