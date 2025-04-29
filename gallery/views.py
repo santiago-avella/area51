@@ -31,11 +31,11 @@ def test_token(request):
 
     payload = {
         'iat': int(time.time()), 
-        'exp': int(time.time() + 40),
+        'exp': int(time.time() + 30),
         'user_id': 9
     }
 
-    encode_jwt = jwt.encode(payload, '123', algorithm='HS256')
+    encode_jwt = jwt.encode(payload, settings.SECRET_AUTHENTIFICATE, algorithm='HS256')
 
     return render(request, 'gallery/test_token.html', {
         'token': encode_jwt
@@ -94,7 +94,7 @@ def Index(request):
     return HttpResponseRedirect('https://myarea51.net/')
 
 
-class IndexGallery(LoginRequiredMixin, View):
+class IndexGallery(View):
     def render_view(self, request, context):
         return render(request, 'gallery/index_gallery.html', context)
 
@@ -157,7 +157,7 @@ def StreamVideo(request, pk, token):
     response = requests.get(url, stream=True)
     if VideoPlayer.validate_token(token): 
         return StreamingHttpResponse(
-            streaming_content=response.iter_content(chunk_size=1048576),
+            streaming_content=response.iter_content(chunk_size=8192),
             content_type = response.headers['Content-Type'],
             headers={
                 'Content-Disposition': 'inline', 
