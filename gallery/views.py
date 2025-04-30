@@ -155,40 +155,26 @@ def StreamVideo(request, pk, token):
     video_player = get_object_or_404(Content, id=pk)
     url = video_player.url
     headers = {}
-    range_header = request.headers.get('Range')
-    if range_header:
-        headers['Range'] = range_header
-
-    # Realizar la solicitud al servidor remoto
-    remote_response = requests.get(url, headers=headers, stream=True)
-
-    if not VideoPlayer.validate_token(token):
+    range_headers = request.headers.get('Range')
+    if range_headers:
+        headers['Range'] = range_headers
+    response = requests.get(url, headers=headers,  stream=True)
+    print(response.headers['Content-Type'])
+    if VideoPlayer.validate_token(token): 
+        response = StreamingHttpResponse(
+            streaming_content=response.iter_content(chunk_size=4096),
+            content_type = 'video/mp4'
+            #headers={
+                #'Content-Disposition': 'inline', 
+                #'X-Content-Type-Options': 'nosniff',  }
+            )
+        if 'Content-Range' in request.headers:
+            response['Content-Range'] = request.headers['Content-Range']
+            response['Accept-Ranges'] = 'bytes'
+        return response
+    else:
         return Http404()
-
-    # Replicar encabezados críticos del servidor remoto
-    content_type = remote_response.headers.get('Content-Type', 'video/mp4')  # Respeta el Content-Type original
-    content_length = remote_response.headers.get('Content-Length')
-    content_range = remote_response.headers.get('Content-Range')
-
-    # Configurar la respuesta de Django
-    response = StreamingHttpResponse(
-        streaming_content=remote_response.iter_content(chunk_size=8192),  # Chunk más grande (8KB)
-        content_type=content_type,  # Usa el Content-Type del servidor remoto
-        status=remote_response.status_code,  # Replica el status (ej: 200, 206)
-    )
-
-    # Copiar encabezados necesarios
-    if content_range:
-        response['Content-Range'] = content_range
-    if content_length:
-        response['Content-Length'] = content_length
-
-    response['Accept-Ranges'] = 'bytes'
-    # Opcional: Si el servidor remoto usa CORS, replica estos encabezados
-    # response['Access-Control-Allow-Origin'] = '*'
-
-    return response
-
+    
 
 
 def validate_webhook(request):
