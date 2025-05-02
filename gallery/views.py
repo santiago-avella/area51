@@ -19,6 +19,8 @@ from .models import Customer, Order, Gallery, Content, Model
 from rest_framework.views import APIView 
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.parsers import JSONParser
+from bleach import clean
 import jwt 
 import requests
 from jwt import ExpiredSignatureError, InvalidTokenError
@@ -119,9 +121,7 @@ class IndexGallery(View):
 
 
 class VideoPlayer(LoginRequiredMixin, View):
-    
     tokens = []
-    
     @classmethod
     def create_token(cls):
         token_create = random.randint(1000, 10000)
@@ -179,7 +179,7 @@ def StreamVideo(request, pk, token):
 
 def validate_webhook(request):
     secret_key = settings.WEBHOOK_KEY
-    webhook_key = request.headers.get("X-WC-Webhook-Signature", "")
+    webhook_key = clean(request.headers.get("X-WC-Webhook-Signature", ""))
     webhook_key_bytes = base64.b64decode(webhook_key)
     webhook_key_hex = webhook_key_bytes.hex()
 
@@ -197,6 +197,7 @@ def validate_webhook(request):
 
 
 class CustomerApiView(APIView):
+    parser_classes = [JSONParser]
     allowed_methods = ['POST']
     def post(self, request):
         if not validate_webhook(request):
@@ -215,15 +216,19 @@ class CustomerApiView(APIView):
     
 
 class ModelApiView(APIView):
+    parser_classes = [JSONParser]
     allowed_methods = ['POST']
     def post(self, request):
         if not validate_webhook(request):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         body = request.body.decode('utf-8')
         data = json.loads(body)
-        data['image'] = data.get('images')[0]['src'] #imagen principal de la modelo
+        try:
+            data['image'] = data.get('images')[0]['src']  #imagen principal de la modelo
+        except Exception:
+            data['image'] = ''
         try: 
-            modelRegister = Model.objects.get(id=request.data.get('id'))
+            modelRegister = Model.objects.get(Q(id=request.data.get('id')) | Q(name=request.data.get('name')))
             serializer = ModelSerializer(modelRegister, data=data)
         except ObjectDoesNotExist: 
             serializer = ModelSerializer(data=data)
@@ -235,16 +240,14 @@ class ModelApiView(APIView):
 
 
 class OrderApiView(APIView):
+    parser_classes = [JSONParser]
     allowed_methods = ['POST']
     def post(self, request):
-        allowed_status_post = [status.value for status in Order.TypesContent]
         if not validate_webhook(request):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-      
+        allowed_status_post = [status.value for status in Order.TypesContent]
         if request.data.get('status') not in allowed_status_post:
             return Response(status=status.HTTP_202_ACCEPTED)
-    
-        
         try:
             orderRegister = Order.objects.get(id=request.data.get('id'))
             serializer = OrderSerializer(orderRegister, data=request.data)

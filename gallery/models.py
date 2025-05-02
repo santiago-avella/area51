@@ -43,12 +43,13 @@ class Model(models.Model):
 
 class Content(models.Model):
     class TypesContent(models.TextChoices):
-        VIDEO = 'Video', 'Video' 
-        AUDIO = 'Audio', 'Audio'
-        IMAGE = 'Imagen', 'Imagen'
+        VIDEO = 'vid', 'Video' 
+        AUDIO = 'aud', 'Audio'
+        IMAGE = 'img', 'Imagen'
     type = models.CharField(max_length=10, choices=TypesContent.choices)
     description = models.TextField(max_length=200, blank=True)
     status = models.BooleanField(default=False)
+    variation = models.CharField(max_length=3, blank=True)
     url = models.CharField(max_length=150, blank=True)
     date = models.DateTimeField(auto_now_add=True)
     miniature = models.CharField(max_length=150, blank=True)

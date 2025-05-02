@@ -10,8 +10,8 @@ class AdminModel(admin.ModelAdmin):
 
 
 class AdmimContent(admin.ModelAdmin):
-    list_display = ['type', 'description', 'status', 'date']
-    list_filter = ['type', 'status', 'date', 'order', 'model']
+    list_display = ['type', 'variation', 'status', 'model', 'date']
+    list_filter = ['order', 'status', 'model', 'type', 'date', 'variation']
 
 
 class AdminCustomer(admin.ModelAdmin):

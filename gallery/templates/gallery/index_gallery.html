@@ -17,17 +17,17 @@
         <form action="{% url 'index-gallery' %}" method="post">
             {% csrf_token %}
             <div class="flex-column contents">
-                <button type="submit" name="button_value" value="Video" class="flex-column contents contents--flex">
+                <button type="submit" name="button_value" value="vid" class="flex-column contents contents--flex">
                     <img class="img" src="{% static '/gallery/images/icon_video.png' %}">
                     <h3>Videos</h3>
                 </button>
 
-                <button type="submit" name="button_value" value="Imagen" class="flex-column contents contents--flex">
+                <button type="submit" name="button_value" value="img" class="flex-column contents contents--flex">
                     <img class="img" src="{% static '/gallery/images/icon_photo.png' %}">
                     <h3>Fotos</h3>
                 </button>
 
-                <button type="submit" name="button_value" value="Audio" class="flex-column contents contents--flex">
+                <button type="submit" name="button_value" value="aud" class="flex-column contents contents--flex">
                     <img class="img" src="{% static '/gallery/images/icon_audio.png' %}">
                     <h3>Audios</h3>
                 </button>
@@ -37,7 +37,7 @@
 
         {% if contents %}
             <div id="space_contents" class="grid_items_contents">
-            {% if content_type == 'Video' %}
+            {% if content_type == 'vid' %}
                 {% for content in contents %}
                     <a class="space_video" href="{% url 'video-player' content.id%}">
                         {% if content.miniature %}
@@ -52,7 +52,7 @@
                         </div>
                     </a>
                 {% endfor %}
-            {% elif content_type == 'Imagen' %}
+            {% elif content_type == 'img' %}
                {% for content in contents %}
                         <a class="space_video" onclick="openModal('modal-{{ content.id }}')">
                             <img src="{{ content.url }}">
@@ -69,7 +69,7 @@
                         </dialog>
                         
                 {% endfor %}
-            {% elif content_type == 'Audio' %}
+            {% elif content_type == 'aud' %}
                 {% for content in contents %}
                 <div class="space_audio">
                     <h3>{{ content.model.name }}</h3>
