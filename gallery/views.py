@@ -45,7 +45,7 @@ def test_token(request):
 '''
 
 
-class PageAuthenticate(View):
+class PageAuthenticate(LoginRequiredMixin, View):
     def validate_token(self, token):
         secret_aunthenticate = settings.SECRET_AUTHENTIFICATE
         try:
@@ -96,7 +96,7 @@ def Index(request):
     return HttpResponseRedirect('https://myarea51.net/')
 
 
-class IndexGallery(View):
+class IndexGallery(LoginRequiredMixin, View):
     def render_view(self, request, context):
         return render(request, 'gallery/index_gallery.html', context)
 
