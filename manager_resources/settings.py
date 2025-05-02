@@ -31,7 +31,7 @@ SECRET_AUTHENTIFICATE = os.getenv('SECRET_AUTHENTIFICATE')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG_STATUS', 'False') == 'True'
 
-ALLOWED_HOSTS = ['web-production-7206c.up.railway.app', 'gallery.myarea51.net']
+ALLOWED_HOSTS = ['gallery.myarea51.net', 'web-production-7206c.up.railway.app']
 
 
 # Application definition
