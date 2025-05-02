@@ -45,7 +45,7 @@ def test_token(request):
 '''
 
 
-class PageAuthenticate(LoginRequiredMixin, View):
+class PageAuthenticate(View):
     def validate_token(self, token):
         secret_aunthenticate = settings.SECRET_AUTHENTIFICATE
         try:
