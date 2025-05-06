@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 class Customer(AbstractUser):
+    id = models.IntegerField(primary_key=True, auto_created=False)
     username = models.CharField(unique=True, max_length=150,blank=True, null=True, default=None)
     password = models.CharField(max_length=128, blank=True, null=True)
     

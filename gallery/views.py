@@ -7,7 +7,7 @@ import random
 from django.shortcuts import render, get_object_or_404
 from django.views import View
 from django.db.models import Q
-from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseForbidden, StreamingHttpResponse
+from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseForbidden, JsonResponse, StreamingHttpResponse
 from django.urls import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import login, logout, authenticate
@@ -152,29 +152,15 @@ class VideoPlayer(LoginRequiredMixin, View):
 
 @login_required
 def StreamVideo(request, pk, token):
-    video_player = get_object_or_404(Content, id=pk)
-    url = video_player.url
-    headers = {}
-    range_headers = request.headers.get('Range')
-    if range_headers:
-        headers['Range'] = range_headers
-    response = requests.get(url, headers=headers,  stream=True)
-    print(response.headers['Content-Type'])
-    if VideoPlayer.validate_token(token): 
-        response = StreamingHttpResponse(
-            streaming_content=response.iter_content(chunk_size=4096),
-            content_type = 'video/mp4'
-            #headers={
-                #'Content-Disposition': 'inline', 
-                #'X-Content-Type-Options': 'nosniff',  }
-            )
-        if 'Content-Range' in request.headers:
-            response['Content-Range'] = request.headers['Content-Range']
-            response['Accept-Ranges'] = 'bytes'
-        return response
-    else:
-        return Http404()
-    
+    if VideoPlayer.validate_token(token):
+        video_player = get_object_or_404(Content, id=pk)
+        url = video_player.url
+        return JsonResponse(
+            {'url': url}
+        )
+    return JsonResponse(
+        {'error': 'unauthorized'}, status=404)
+        
 
 
 def validate_webhook(request):
@@ -253,7 +239,6 @@ class OrderApiView(APIView):
             serializer = OrderSerializer(orderRegister, data=request.data)
         except ObjectDoesNotExist:
             serializer = OrderSerializer(data=request.data)
-
         if not serializer.is_valid():
             return Response(status=status.HTTP_400_BAD_REQUEST)
         serializer.save()

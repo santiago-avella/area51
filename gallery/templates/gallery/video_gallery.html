@@ -16,9 +16,8 @@
         <div class="container">
        
             <source>
-                <video controls src="{% url 'stream-video' video_request.id token%}"></video>  
+                <video controls src=""></video>  
             </source>
-
             <div class="flex-column tab_info_video tab_info_video--flex">
               
                 <h3 id="name_model">
@@ -35,9 +34,27 @@
                     <img class="like dislike" src="{% static '/gallery/images/icon_like.png' %}">   
                 </div>
             </div>
-            
         </div>
     </section>
- <script src="{% static 'gallery/js/disable_click_left.js' %}"></script>
+ <script>
+    const video = document.querySelector('video')
+    fetch("{% url 'stream-video' video_request.id token %}")
+        .then(response => response.json())
+        .then(data => {
+            const videoUrl= data.url
+            return fetch(videoUrl)
+        })
+        .then(response => response.blob())
+        .then(blob => {
+            const blobUrl = URL.createObjectURL(blob)
+            video.src = blobUrl
+            setTimeout(() => {
+                URL.revokeObjectURL(blobUrl), 50 
+            })
+        })
+</script>
+
+
+ 
 {% endblock %}
     

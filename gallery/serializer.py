@@ -33,13 +33,15 @@ class ContentSerializer(serializers.Serializer):
         format_content = {'Video': 'vid', 'Audio': 'aud', 'Fotografía': 'img'}
         info_variation = {}
         for item in value:
-            if item['key'] not in required_fields.keys():
-                raise serializers.ValidationError('Faltan campos requeridos')
-            info_variation[required_fields[item['key']]] = item['value']
+            if item['key'] in required_fields.keys():
+                info_variation[required_fields[item['key']]] = item['value']
+        if len(info_variation) != len(required_fields):
+            raise serializers.ValidationError('Hacen falta campos requeridos')
         info_variation['variation'] = info_variation['variation'].replace('x', '') # el formato es x10, x5, x1 para cantidades, se desprecia el 1er caracter
         if info_variation['type_content'] not in format_content.keys():
             raise serializers.ValidationError('Hay valores no permitidos')
         info_variation['type_content'] = format_content[info_variation['type_content']]
+        print(info_variation)
         return info_variation
 
 
@@ -61,7 +63,7 @@ class OrderSerializer(serializers.ModelSerializer):
                                    model=item['product_id'], order=order)
         except:
             print('error')
-            raise serializers.ValidationError('No se pudo guardar la informacion de itmes por orden')
+            raise serializers.ValidationError('No se pudo guardar la informacion de items por orden')
 
 
     def create(self, validated_data):
